@@ -1,0 +1,11 @@
+playwright
+requests
+beautifulsoup4
+pandas
+gspread
+google-auth
+email-validator
+dnspython
+aiosmtplib
+loguru
+

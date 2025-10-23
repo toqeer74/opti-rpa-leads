@@ -1,0 +1,35 @@
+name: OptiRPA Nightly
+
+on:
+  schedule:
+    - cron: "0 18 * * *"   # Runs daily 11 PM Pakistan
+  workflow_dispatch: {}
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          python -m playwright install --with-deps
+
+      - name: Run pipeline
+        env:
+          SHEETS_SA_JSON: ${{ secrets.SHEETS_SA_JSON }}
+        run: python main.py
+
+      - name: Upload leads
+        uses: actions/upload-artifact@v4
+        with:
+          name: leads-csv
+          path: data/leads.csv
+
