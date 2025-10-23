@@ -12,7 +12,11 @@ def push_csv_to_sheet(csv_path: str, sheet_name: str):
         return
     info = json.loads(creds_json)
     creds = Credentials.from_service_account_info(
-        info, scopes=["https://www.googleapis.com/auth/spreadsheets"]
+        info,
+        scopes=[
+            "https://www.googleapis.com/auth/spreadsheets",
+            "https://www.googleapis.com/auth/drive"  # ✅ Added Drive scope
+        ]
     )
     gc = gspread.authorize(creds)
     try:
@@ -24,4 +28,3 @@ def push_csv_to_sheet(csv_path: str, sheet_name: str):
     ws.clear()
     ws.update([df.columns.values.tolist()] + df.values.tolist())
     print(f"📤 Uploaded {len(df)} rows to Google Sheet '{sheet_name}'")
-
